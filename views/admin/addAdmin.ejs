@@ -1,0 +1,192 @@
+<style>
+    body {
+        background-color: #f8f9fd;
+    }
+
+    .formCreateAdmin {
+        width: 750px;
+        background-color: #ffff;
+        border-radius: 10px;
+        border: 1px solid rgb(222, 222, 222);
+        height: fit-content;
+        padding: 70px 50px;
+    }
+
+    .seccontent {
+        display: flex;
+        justify-content: center;
+        margin-left: 150px;
+    }
+
+    .formCreateAdmin p {
+        color: black;
+        font-size: 26px;
+        margin-bottom: 10px;
+        text-align: center;
+        font-weight: 600;
+
+    }
+
+    #box-input {
+        margin-bottom: 15px;
+    }
+
+    #box-input label {
+        font-size: 16px;
+        font-weight: 400;
+        color: #44546F;
+        margin: 10px 0;
+    }
+
+    #box-input .custom-file-upload {
+        margin-left: 15px;
+    }
+
+    #box-input input[type=text],
+    input[type=email],
+    input[type=password] {
+        height: 40px;
+        width: 100%;
+        padding: 0 20px;
+        border: 1.5px solid #8590a2;
+        border-radius: 5px;
+        position: relative;
+    }
+
+    .showpass {
+        display: flex;
+        margin-top: 10px;
+
+    }
+
+    .showpass input {
+        width: 17px;
+    }
+
+    .showpass span {
+        font-size: 15px;
+        margin-left: 5px;
+        color: #373737cc;
+    }
+
+    .secFormaddAdmin button {
+        background-color: black;
+        color: white;
+        padding: 10px 30px;
+        border: none;
+        border-radius: 5px;
+    }
+
+    .secFormaddAdmin .btnaddadmin {
+        width: 100%;
+        display: flex;
+        justify-content: end;
+    }
+
+    .imgprofile img {
+        height: 150px;
+        width: 150px;
+        border-radius: 100%;
+        background-color: rgb(255, 255, 255);
+        object-fit: cover;
+        object-position: center;
+        border: 15px solid #242647;
+    }
+
+    .custom-file-upload {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #242647;
+        color: white !important;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center;
+        margin-top: 10px;
+        transition: background-color 0.3s ease;
+    }
+
+    .custom-file-upload:hover {
+        background-color: #1a1b2f;
+    }
+
+    #profileImageInput {
+        display: none;
+    }
+
+    .imgprofile {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .imgprofile img {
+        height: 150px;
+        width: 150px;
+        border-radius: 100%;
+        background-color: rgb(255, 255, 255);
+        object-fit: cover;
+        object-position: center;
+        border: 15px solid #242647;
+        margin-bottom: 10px;
+    }
+</style>
+<div class="seccontent">
+    <div class="formCreateAdmin">
+        <div class="secFormaddAdmin">
+            <div class="headformaaddadmin">
+                <p>สร้างบัญชีผู้ดูแลระบบ</p>
+            </div>
+            <form action="/adminPage/addAdmin" method="POST" enctype="multipart/form-data">
+                <div id="box-input" class="imgprofile">
+                    <img id="profileImageDisplay" src="/img/profileImage/img-user.svg" alt="Profile Image">
+                    <label for="profileImageInput" class="custom-file-upload">
+                        อัปโหลดรูปภาพ
+                    </label>
+                    <input type="file" name="profileImage" id="profileImageInput" accept="image/*">
+                </div>
+                <% if (typeof successMessage !== 'undefined' && successMessage) { %>
+                    <div class="alert alert-success">
+                        <%= successMessage %>
+                    </div>
+                <% } %>
+                
+                <% if (typeof error !== 'undefined' && error) { %>
+                    <div class="alert alert-danger">
+                        <%= error %>
+                    </div>
+                <% } %>                           
+                <div id="box-input">
+                    <label for="username">ชื่อผู้ใช้ <span style="color: red;">*</span></label><br>
+                    <input type="text" id="username" name="username" placeholder="ชื่อผู้ใช้" required>
+                </div>
+                <div id="box-input">
+                    <label for="googleEmail">อีเมล <span style="color: red;">*</span></label><br>
+                    <input type="email" id="googleEmail" name="googleEmail" placeholder="อีเมลผู้ใช้" required>
+                </div>
+                <div id="box-input">
+                    <label for="password">รหัสผ่าน <span style="color: red;">*</span></label><br>
+                    <input type="password" id="password" name="password" placeholder="รหัสผ่านผู้ใช้" required>
+                </div>
+
+                <div id="box-input">
+                    <label for="confirmPassword">ยืนยันรหัสผ่าน <span style="color: red;">*</span></label><br>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="ยืนยันรหัสผ่าน"
+                        required>
+                </div>
+
+                <div class="showpass">
+                    <input type="checkbox" id="checkbox">
+                    <span>แสดงรหัสผ่าน</span>
+                </div>
+
+                <div class="btnaddadmin">
+                    <button type="submit">ยืนยัน</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<script src="/public/script/addAdminScipt/addAdmin.js"></script>

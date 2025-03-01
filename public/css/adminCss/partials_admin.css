@@ -1,0 +1,233 @@
+@import url("https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+:root {
+    --sidebar: #323450;
+    --lighttopnav: #474962;
+    --select: #7952b3;
+    --lightselect: #e5e4fa;
+    --deepbackground: #f7f8f9;
+    --line: #f7f8f9;
+    --lightline: #e9ebef;
+    --lightText: #fffc;
+    --btn: #5D5FEF;
+    --body-color: #e4e9f7;
+    --sidebar-color: #fff;
+    --primary-color: #7952b3;
+    --primary-color-light: #f6f5f7;
+    --toggle-color: #ddd;
+    --text-color: #707070;
+}
+
+body {
+    height: 100%;
+    font-family: "Kanit", sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Sidebar */
+.secside {
+    position: fixed;
+    height: 100%;
+    z-index: 1;
+}
+
+.sidebar.close {
+    width: 90px;
+    transition: width 0.4s ease;
+}
+
+.sidebar {
+    position: static;
+    height: 100%;
+    width: 350px;
+    background: var(--sidebar);
+    transition: width 0.4s ease;
+}
+
+.headInfo {
+    height: auto;
+    position: relative;
+    padding: 30px 0 10px 0;
+}
+
+.sidebar.close .headInfo {
+    height: auto;
+    position: relative;
+}
+
+.headInfo .image-text {
+    display: flex;
+    align-items: center;
+    height: 60px;
+    padding: 40px 20px;
+}
+
+.sidebar .image {
+    max-width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.headInfo .image img {
+    border-radius: 15px;
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+
+header .image-text .header-text {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar .text {
+    font-size: 16px;
+    font-weight: 500;
+    margin-left: 10px;
+    color: #fff;
+    transition: opacity 0.3s ease;
+    white-space: nowrap;
+    opacity: 1;
+}
+
+.header-text .name {
+    font-weight: 400;
+    font-size: 20px;
+    margin-left: 10px;
+    color: #fff;
+}
+
+.sidebar header .toggle {
+    position: absolute;
+    top: 50%;
+    right: -13px;
+    transform: translateY(-50%) rotate(180deg);
+    height: 25px;
+    width: 25px;
+    background-color: var(--btn);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: var(--lightline);
+    font-size: 20px;
+    transition: transform 0.4s ease;
+}
+
+.sidebar.close .toggle {
+    transform: translateY(-50%) rotate(0deg);
+}
+
+.sidebar.close .header-text .name,
+.sidebar.close .menu-link .text {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.1s ease, visibility 0.3s ease;
+}
+
+.sidebar .header-text .name,
+.sidebar .menu-link .text {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.8s ease, visibility 0.3s ease;
+}
+
+
+
+.line {
+    width: 100%;
+    height: 1px;
+    background-color: var(--lightline);
+    padding: 0;
+    margin: 0;
+}
+
+.menu-bar {
+    padding: 10px 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-link {
+    margin-bottom: 5px;
+    padding: 0;
+    width: 100%;
+}
+
+.menu-link li {
+    height: 50px;
+    margin-top: 5px;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+}
+
+.menu-link li:hover {
+    background-color: var(--btn);
+}
+
+.sidebar li #icon {
+    min-width: 40px;
+    font-size: 20px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar.close .nav-links a {
+    width: 70px;
+}
+
+.nav-links a {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.8s ease, visibility 0.3s ease;
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+    font-weight: 400;
+    height: 100%;
+    margin: 15px 0;
+    padding: 0 15px;
+    cursor: pointer;
+    align-items: center;
+    display: flex;
+    border-radius: 6px;
+    width: 210px;
+}
+
+.menu-link .nav-links:hover a,
+.menu-link .nav-links:hover .text {
+    color: white !important;
+    transition: 0.3s;
+}
+
+.menu-link li.active,
+.menu-link li.active #icon {
+    color: white !important;
+    background-color: var(--btn);
+    transition: 0.3s;
+}
