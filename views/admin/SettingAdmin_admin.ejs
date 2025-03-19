@@ -1,14 +1,29 @@
 <!-- C:\Users\plamy\OneDrive\เดสก์ท็อป\Task_Project\views\admin\SettingAdmin_admin.ejs -->
 <style>
+    body {
+        background-color: #f3f4f6;
+    }
+
+    .content {
+        background-color: #f3f4f6;
+    }
+
     .secsettingadmin {
         width: 100%;
     }
 
+    .subsecsetpro {
+        background-color: #ffffffff;
+        border-radius: 20px;
+        border: solid 1px #3f3f3f42;
+    }
+
     .headsecsettingadmin {
-        background-color: #323450;
+        background-color: rgb(17 24 39);
         color: #ffffff;
-        padding: 22px 20px;
-        border-radius: 10px;
+        padding: 32px 24px;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
         margin-bottom: 20px;
     }
 
@@ -19,6 +34,7 @@
     .profilesection {
         width: 100%;
         display: flex;
+        padding: 20px;
     }
 
     .editimgprofile {
@@ -27,8 +43,7 @@
         width: 46%;
         margin-right: 4%;
         align-items: center;
-        background-color: #323450;
-        color: #ffff;
+        color: rgb(17 24 39);
         padding: 24px;
         border-radius: 10px;
         justify-content: center;
@@ -41,23 +56,38 @@
         background-color: rgb(255, 255, 255);
         object-fit: cover;
         object-position: center;
-        border: 15px solid #242647;
+        border: 7px solid #00000091;
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / .1), 0 4px 6px -4px rgb(0 0 0 / .1);
     }
 
     .editimgprofile button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        /* เว้นระยะห่างระหว่างไอคอนกับข้อความ */
         width: auto;
         height: auto;
-        padding: 22px;
-        border: #ffffff solid 1px;
-        background-color: #323450;
-        color: #cccccc;
-        border-radius: 10px;
+        padding: 12px 20px;
+        border: none;
+        background-color: rgb(17, 24, 39);
+        color: #ffffff;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s ease, box-shadow 0.3s ease;
     }
 
     .editimgprofile button:hover {
         background-color: #242647;
-        color: #ffff;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     }
+
+    /* ปรับขนาดไอคอนในปุ่ม */
+    .editimgprofile button i {
+        font-size: 18px;
+    }
+
 
     .editimgprofile span {
         margin: 16px 0;
@@ -65,13 +95,14 @@
     }
 
     .aboutadminsection {
-        width: 50%;
+        width: 60%;
         display: block;
+        align-content: center;
     }
 
     .aboutadmin {
         align-items: center;
-        background-color: #323450;
+        background-color: #111827;
         color: #ffff;
         padding: 24px;
         border-radius: 10px;
@@ -164,17 +195,17 @@
 
     /* สไตล์สำหรับ Popup */
     .popup-overlay {
+        display: none;
+        /* ซ่อน Popup ไว้ */
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
         background: rgba(0, 0, 0, 0.5);
-        display: none;
         justify-content: center;
         align-items: center;
         z-index: 1001;
-        color: #000000;
     }
 
     .popup-content {
@@ -295,6 +326,7 @@
         .profilesection {
             display: block;
             align-items: center;
+
         }
 
         .profilesection img {
@@ -340,291 +372,147 @@
             margin-block-end: 10px;
         }
 
+        .profile-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .camera-icon {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.6);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .camera-icon:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .camera-icon i {
+            color: #ffffff;
+            font-size: 20px;
+        }
     }
 </style>
 <div class="main-container">
     <div class="content">
         <div class="secsettingadmin">
-            <div class="headsecsettingadmin">
-                <h2>ตั้งค่าผู้ดูแลระบบ</h2>
+            <div class="subsecsetpro">
+                <div class="headsecsettingadmin">
+                    <h2>ตั้งค่าผู้ดูแลระบบ</h2>
+                </div>
+
+                <div class="profilesection">
+                    <form class="editimgprofile" action="/SettingAdmin/updateProfileImage" method="post"
+                        enctype="multipart/form-data">
+                        <div class="editimgprofile">
+                            <div class="profile-container">
+                                <img id="profileImageDisplay" src="<%= user.profileImage %>" alt="Profile Image"
+                                    onclick="document.getElementById('profileImageInput').click();">
+                                <label for="profileImageInput" class="camera-icon" style="
+                                    position: relative;
+                                    bottom: 30px;
+                                    left: 100px;
+                                    background-color: rgb(0, 0, 0);
+                                    border-radius: 50%;
+                                    width: 40px;
+                                    height: 40px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    cursor: pointer;
+                                    transition: background-color 0.3s ease;
+                                ">
+                                    <i class='bx bx-camera' style="
+                                        color: #ffffff;
+                                        font-size: 20px;
+                                    "></i>
+                                </label>
+                            </div>
+                            <input type="file" name="profileImage" id="profileImageInput" style="display: none;">
+                            <span>
+                                <%= user.username %>
+                            </span>
+                            <button type="submit"><i class='bx iconset bx-camera'></i> เปลี่ยนรูปโปรไฟล์</button>
+                        </div>
+
+                    </form>
+                    <div class="aboutadminsection">
+                        <div class="aboutadmin">
+                            <div class="row">
+                                <div class="col icon"><i class='bx bx-user'></i></div>
+                                <div class="col label">Username</div>
+                                <div class="col1 value">
+                                    <%= user.username %>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col icon"><i class='bx bx-envelope'></i></div>
+                                <div class="col label">Email</div>
+                                <div class="col1 value">
+                                    <%= user.googleEmail %>
+                                </div>
+                            </div>
+                            <hr>
+                            
+                            <div class="row">
+                                <div class="col icon"><i class='bx bx-key'></i></div>
+                                <div class="col label">รหัสผ่าน</div>
+                                <div class="col1 value">
+                                    <a href="#" id="changePasswordLink">Change Password</a>                                </div>
+                               
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="changePasswordPopup" class="popup-overlay">
+        <div class="popup-content">
+            <div class="popup-header">
+                <span>เปลี่ยนรหัสผ่าน</span>
+                <button id="closeChangePasswordPopup"><i class='bx bx-x'></i></button>
             </div>
 
-            <div class="profilesection">
-                <form class="editimgprofile" action="/SettingAdmin/updateProfileImage" method="post"
-                    enctype="multipart/form-data">
-                    <div class="editimgprofile">
-                        <img id="profileImageDisplay" src="<%= user.profileImage %>" alt="Profile Image"
-                            onclick="document.getElementById('profileImageInput').click();">
-                        <input type="file" name="profileImage" id="profileImageInput" style="display: none;">
-                        <span>
-                            <%= user.username %>
-                        </span>
-                        <button type="submit">เปลี่ยนรูปโปรไฟล์</button>
+            <div class="user-details">
+                <form id="changePasswordForm" action="/SettingAdmin/changePassword" method="post">
+                    <div>
+                        <label for="currentPassword">รหัสผ่านปัจจุบัน:</label>
+                        <input type="password" id="currentPassword" name="currentPassword"
+                            placeholder="รหัสผ่านปัจจุบัน" required>
+                        <i class="bx bx-show" id="currentPasswordToggle"></i>
+                    </div>
+                    <div>
+                        <label for="newPassword">รหัสผ่านใหม่:</label>
+                        <input type="password" id="newPassword" name="newPassword" placeholder="รหัสผ่านปัจจุบัน"
+                            required>
+                        <i class="bx bx-show" id="newPasswordToggle"></i>
+                    </div>
+                    <div>
+                        <label for="confirmPassword">ยืนยันรหัสผ่านใหม่:</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword"
+                            placeholder="ยืนยันรหัสผ่านปัจจุบัน" required>
+                        <i class="bx bx-show" id="confirmPasswordToggle"></i>
                     </div>
                 </form>
-                <!-- <div class="editimgprofile">
-                    
-                    <img src="<%= user.profileImage %>" alt="Profile Image">
-                    <span>
-                        <%= user.username %>
-                    </span>
-                    <button>เปลี่ยนรูปโปรไฟล์</button>
-                </div> -->
-                <div class="aboutadminsection">
-                    <div class="aboutadmin">
-                        <div class="row">
-                            <div class="col username">
-                                <p>ชื่อผู้ใช้</p>
-                            </div>
-                            <div class="col1 username1">
-                                <span>
-                                    <%= user.username %>
-                                </span>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col email">
-                                <p>อีเมล</p>
-                            </div>
-                            <div class="col1 email1">
-                                <span>
-                                    <%= user.googleEmail %>
-                                </span>
-                            </div>
-                        </div>
-
-                        <hr>
-                        <div class="row">
-                            <div class="col email">
-                                <p>รหัสผ่าน</p>
-                            </div>
-                            <div class="col1 email1">
-                                <span>
-                                    <button onclick="openChangePasswordPopup()">เปลี่ยนรหัสผ่าน</button> </span>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="aboutadmin">
-                        <div class="row">
-                            <div class="col">
-                                <p>ประวัติการเข้าสู่ระบบ</p>
-                            </div>
-                            <div class="col1">
-                                <span class="show-login-history" style="cursor: pointer; color: #ADD8E6;">
-                                    คลิกเพื่อดูประวัติการเข้าสู่ระบบ
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            </div>
+            <div class="popup-actions">
+                <button type="submit" form="changePasswordForm">ยืนยัน</button>
             </div>
         </div>
     </div>
-</div>
 
-<div id="changePasswordPopup" class="popup-overlay">
-    <div class="popup-content">
-        <div class="popup-header">
-            <span>เปลี่ยนรหัสผ่าน</span>
-            <button onclick="closePopup('changePasswordPopup')"><i class='bx bx-x'></i></button>
-        </div>
-        <div class="user-details">
-            <form id="changePasswordForm" action="/SettingAdmin/changePassword" method="post">
-                <div>
-                    <label for="currentPassword">รหัสผ่านปัจจุบัน:</label>
-                    <input type="password" id="currentPassword" name="currentPassword" placeholder="รหัสผ่านปัจจุบัน"
-                        required>
-                    <i class="bx bx-show" id="currentPasswordToggle"
-                        onclick="togglePasswordVisibility('currentPassword')"></i>
-                </div>
-                <div>
-                    <label for="newPassword">รหัสผ่านใหม่:</label>
-                    <input type="password" id="newPassword" name="newPassword" placeholder="รหัสผ่านปัจจุบัน" required>
-                    <i class="bx bx-show" id="newPasswordToggle" onclick="togglePasswordVisibility('newPassword')"></i>
-                </div>
-                <div>
-                    <label for="confirmPassword">ยืนยันรหัสผ่านใหม่:</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword"
-                        placeholder="ยืนยันรหัสผ่านปัจจุบัน" required>
-                    <i class="bx bx-show" id="confirmPasswordToggle"
-                        onclick="togglePasswordVisibility('confirmPassword')"></i>
-                </div>
-            </form>
-        </div>
-        <div class="popup-actions">
-            <button type="submit" form="changePasswordForm">ยืนยัน</button>
-        </div>
-    </div>
-</div>
-
-<div id="loginHistoryPopup" class="popup-overlay">
-    <div class="popup-content">
-        <div class="popup-header">
-            <span>ประวัติการเข้าสู่ระบบ</span>
-            <button onclick="closePopup('loginHistoryPopup')"><i class='bx bx-x'></i></button>
-        </div>
-        <div class="popup-body" id="loginHistoryContent">
-            <!-- เนื้อหาจะถูกเพิ่มที่นี่ -->
-        </div>
-        <div class="popup-actions">
-            <button onclick="closePopup('loginHistoryPopup')">ปิด</button>
-        </div>
-    </div>
-</div>
-
-<script>
-    document.querySelector('.show-login-history').addEventListener('click', async () => {
-    try {
-        const response = await fetch('/SettingAdmin/loginHistory');
-        const data = await response.json();
-
-        if (data.success) {
-            const { lastLogin, lastActive } = data.data;
-            const loginHistoryContent = `
-                <p><strong>เข้าสู่ระบบล่าสุด:</strong> ${new Date(lastLogin).toLocaleString()}</p>
-                <p><strong>กิจกรรมล่าสุด:</strong> ${new Date(lastActive).toLocaleString()}</p>
-            `;
-            document.getElementById('loginHistoryContent').innerHTML = loginHistoryContent;
-            document.getElementById('loginHistoryPopup').style.display = 'block';
-        } else {
-            alert(data.message);
-        }
-    } catch (error) {
-        console.error('Error fetching login history:', error);
-        alert('เกิดข้อผิดพลาดในการดึงข้อมูล');
-    }
-});
-</script>
-
-<script>
-
-    function togglePasswordVisibility(inputId) {
-        const passwordInput = document.getElementById(inputId);
-        const passwordToggle = document.getElementById(inputId + 'Toggle');
-
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            passwordToggle.classList.remove('bx-show');
-            passwordToggle.classList.add('bx-hide');
-        } else {
-            passwordInput.type = 'password';
-            passwordToggle.classList.remove('bx-hide');
-            passwordToggle.classList.add('bx-show');
-        }
-    }
-</script>
-
-<script>
-    
-
-    function closePopup(popupId) {
-        document.getElementById(popupId).style.display = "none";
-    }
-
-    function openChangePasswordPopup() {
-        document.getElementById('changePasswordPopup').style.display = 'block';
-    }
-
-    // ฟังก์ชันสำหรับตรวจสอบรหัสผ่าน
-    function validatePassword(password) {
-        // ตรวจสอบความยาวอย่างน้อย 8 ตัวอักษร
-        if (password.length < 8) {
-            return "รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร";
-        }
-        // ตรวจสอบว่ามีตัวอักษรพิมพ์ใหญ่ ตัวอักษรพิมพ์เล็ก และตัวเลข
-        if (!/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password)) {
-            return "รหัสผ่านต้องมีตัวอักษรพิมพ์ใหญ่ ตัวอักษรพิมพ์เล็ก และตัวเลข";
-        }
-        return null; // ผ่านเงื่อนไขทั้งหมด
-    }
-
-    // ฟังก์ชันสำหรับแสดง/ซ่อนรหัสผ่าน
-    function togglePasswordVisibility(inputId) {
-        const passwordInput = document.getElementById(inputId);
-        const passwordToggle = document.getElementById(inputId + 'Toggle');
-
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            passwordToggle.classList.remove('bx-show');
-            passwordToggle.classList.add('bx-hide');
-        } else {
-            passwordInput.type = 'password';
-            passwordToggle.classList.remove('bx-hide');
-            passwordToggle.classList.add('bx-show');
-        }
-    }
-
-    //  เพิ่ม Event Listener สำหรับ submit form
-    document.getElementById('changePasswordForm').addEventListener('submit', function (event) {
-        event.preventDefault(); // ป้องกันการ submit form แบบปกติ
-
-        const currentPassword = document.getElementById('currentPassword').value;
-        const newPassword = document.getElementById('newPassword').value;
-        const confirmPassword = document.getElementById('confirmPassword').value;
-
-        // ตรวจสอบรหัสผ่านใหม่
-        const newPasswordError = validatePassword(newPassword);
-        if (newPasswordError) {
-            alert(newPasswordError);
-            return;
-        }
-
-        //  ตรวจสอบว่ารหัสผ่านใหม่ตรงกับการยืนยันหรือไม่
-        if (newPassword !== confirmPassword) {
-            alert('รหัสผ่านใหม่ไม่ตรงกับการยืนยัน');
-            return;
-        }
-
-        //  ส่งข้อมูลไปยัง server ด้วย AJAX
-        fetch('/SettingAdmin/changePassword', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ currentPassword, newPassword })
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert(data.message);
-                    closePopup('changePasswordPopup');
-                } else {
-                    alert(data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('เกิดข้อผิดพลาดในการเปลี่ยนรหัสผ่าน');
-            });
-    });
-
-    //  โค้ดสำหรับเปลี่ยนรูปโปรไฟล์
-    const profileImageInput = document.getElementById('profileImageInput');
-    const profileImageDisplay = document.getElementById('profileImageDisplay');
-
-    profileImageInput.addEventListener('change', (event) => {
-        const file = event.target.files[0];
-        const reader = new FileReader();
-
-        reader.onload = (event) => {
-            profileImageDisplay.src = event.target.result;
-        }
-        reader.readAsDataURL(file);
-    });
-</script>
-//
-<script>
-    //     function closePopup(popupId) {
-    //       document.getElementById(popupId).style.display = "none";
-    //     }
-
-    //     document.querySelector('.show-login-history').addEventListener('click', function() {
-    //       document.getElementById('loginHistoryPopup').style.display = "block";
-    //     });
-
-    //     document.querySelector('.show-activity-log').addEventListener('click', function() {
-    //       document.getElementById('activityLogPopup').style.display = "block";
-    //     });
-//   </script>
+    <script src="./public/script/SettingAdminScipt/SettingAdmin.js"></script>

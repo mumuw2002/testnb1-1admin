@@ -70,6 +70,8 @@ const UserSchema = new Schema({
         type: Date,
         required: false,
     },
+    isDeleted: { type: Boolean, default: false },
+    deletedAt: { type: Date, default: null }
 });
 
 UserSchema.plugin(passportLocalMongoose, { usernameField: 'googleEmail' });

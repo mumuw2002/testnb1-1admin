@@ -37,6 +37,7 @@ router.get('/ReportUserProblem/:id', ensureAdmin, adminController.updateReportUs
 
 router.put('/userAccountManagement/updateusersmanage', ensureAdmin, adminController.updateusersmanage);
 router.post('/admin/userAccountManagement/reset-password/:id', adminController.resetPassword); 
+router.delete('/delete-user/:id', ensureAdmin, adminController.deleteUser);
 
 router.get('/reset-password-new-get', adminController.showResetPasswordNew);
 router.post('/reset-password-new', adminController.resetPasswordNew); // เพิ่ม route นี้

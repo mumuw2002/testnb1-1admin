@@ -11,6 +11,7 @@ const crypto = require('crypto');
 const mongoose = require('mongoose');
 const UserActivity = require('../models/UserActivity');
 const FeatureUsage = require('../models/FeatureUsage');
+const Complaint = require('../models/Complaint');
 const os = require('os');
 const osUtils = require('os-utils');
 const process = require('process');
@@ -493,6 +494,28 @@ exports.updateusersmanage = async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาด...' });
+    }
+};
+
+exports.deleteUser = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        console.log("Soft Deleting User ID:", userId);
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+        // ทำ Soft Delete โดยอัปเดต isDeleted เป็น true และบันทึกเวลาลบ
+        user.isDeleted = true;
+        user.deletedAt = new Date();
+        await user.save();
+
+        res.json({ success: true, message: "ลบผู้ใช้สำเร็จ (Soft Delete)" });
+    } catch (error) {
+        console.error("Error soft deleting user:", error);
+        res.status(500).json({ success: false, message: "เกิดข้อผิดพลาดในการลบผู้ใช้" });
     }
 };
 

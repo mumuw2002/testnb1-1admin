@@ -3,6 +3,7 @@
   :root {
     --sidebar: #323450;
   }
+
   .user-management {
     width: 95%;
     height: 95%;
@@ -155,6 +156,7 @@
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    /* ปรับ z-index */
   }
 
   .popup-content {
@@ -168,7 +170,8 @@
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    z-index: 100;
+    z-index: 1001;
+    /* ปรับ z-index */
   }
 
   .popup-content .bx {
@@ -286,9 +289,51 @@
     background-color: #cccccc;
     cursor: default;
   }
-  .editusername{
+
+  .editusername {
     display: flex;
     align-items: baseline;
+  }
+
+  .overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1002;
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  z-index: 1003;
+  text-align: center;
+}
+
+
+  .confirm-btn {
+    background: red;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+  }
+
+  .cancel-btn {
+    background: gray;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
   }
 </style>
 
@@ -320,8 +365,7 @@
               <tbody>
                 <% if (users.length) { %>
                   <% users.forEach((user, index)=> { %>
-                    <tr data-user-id="<%= user._id %>"
-                      onclick="showUserDetailsPopup('<%= user._id %>', '<%= user.username %>', '<%= user.googleEmail %>', '<%= user.userid %>')">
+                    <tr data-user-id="<%= user._id %>" data-username="<%= user.username %>" data-email="<%= user.googleEmail %>" data-userid="<%= user.userid %>">
                       <td>
                         <%= user.userid %>
                       </td>
@@ -351,7 +395,7 @@
   <div class="popup-content">
     <div class="popup-header">
       <span>รายละเอียดผู้ใช้</span>
-      <button onclick="closeUserDetailsPopup()"><i class='bx bx-x'></i></button>
+      <button id="closePopupBtn"><i class='bx bx-x'></i></button>
     </div>
     <div class="user-details">
       <div class="text">ไอดีผู้ใช้: </div>
@@ -359,7 +403,7 @@
       <div class="text">ชื่อผู้ใช้: </div>
       <div class="editusername">
         <p><input type="text" id="user-username"></p>
-      <button onclick="saveUsernameChanges()">บันทึก</button>
+        <button id="saveUsernameBtn">บันทึก</button>
       </div>
       <div class="text">อีเมล: </div>
       <p><span id="user-email"></span></p>
@@ -368,142 +412,18 @@
       </p>
     </div>
     <div class="popup-actions">
-      <button class="delete-btn" data-id="" onclick="deleteUser(this.dataset.id)">ลบผู้ใช้</button>
+      <button class="delete-btn" data-id="<%= user._id %>">ลบผู้ใช้</button>
+    </div>
+
+    <!-- เพิ่ม Popup สำหรับยืนยันการลบผู้ใช้ -->
+    <div id="overlay" class="overlay"></div>
+    <div id="deletePopup" class="popup">
+      <h2>ยืนยันการลบบัญชี</h2>
+      <p>คุณแน่ใจหรือไม่ว่าต้องการลบบัญชีนี้?</p>
+      <button id="confirmDelete" class="confirm-btn">ยืนยัน</button>
+      <button id="cancelDelete" class="cancel-btn">ยกเลิก</button>
     </div>
   </div>
 </div>
 
-
-<script>
-  function showUserDetailsPopup(userId, username, email, userid) {
-    // แสดงข้อมูลผู้ใช้ใน popup
-    document.getElementById('user-id').innerText = userid;
-    document.getElementById('user-username').value = username;
-    document.getElementById('user-email').innerText = email;
-    document.querySelector('#user-details-popup .delete-btn').dataset.id = userId; // set user id to delete button
-
-    // แสดง popup
-    document.getElementById('user-details-popup').style.display = 'block';
-  }
-
-  function closeUserDetailsPopup() {
-    document.getElementById('user-details-popup').style.display = 'none';
-  }
-
-  function saveUsernameChanges() {
-    const userId = document.querySelector('#user-details-popup .delete-btn').dataset.id;
-    const newUsername = document.getElementById('user-username').value;
-
-    // ส่งข้อมูลไปยัง server ด้วย AJAX
-    fetch('/userAccountManagement/updateusersmanage', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ userId, newUsername })
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log("Response from server:", data);
-        if (data.success) {
-          // อัปเดตชื่อผู้ใช้ในตาราง
-          const usernameCell = document.querySelector(`tr[data-user-id="${userId}"] td:nth-child(2)`);
-          usernameCell.innerText = newUsername;
-
-          // ปิด popup และแสดงข้อความสำเร็จ
-          closeUserDetailsPopup();
-          alert('อัปเดตชื่อผู้ใช้สำเร็จ');
-        } else {
-          // แสดงข้อความผิดพลาด
-          alert('เกิดข้อผิดพลาดในการอัปเดตชื่อผู้ใช้');
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('เกิดข้อผิดพลาดในการอัปเดตชื่อผู้ใช้');
-      });
-  }
-
-  function resetPassword(userId) {
-    fetch(`/admin/userAccountManagement/reset-password/${userId}`, {
-      method: 'POST',
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          alert('ส่งอีเมลรีเซ็ตรหัสผ่านสำเร็จ');
-        } else {
-          alert('เกิดข้อผิดพลาดในการส่งอีเมลรีเซ็ตรหัสผ่าน');
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('เกิดข้อผิดพลาดในการส่งอีเมลรีเซ็ตรหัสผ่าน');
-      });
-  }
-
-  document.addEventListener("DOMContentLoaded", function () {
-    function searchUsers() {
-      const searchInput = document.querySelector('input[name="searchTerm"]');
-      const table = document.querySelector('table');
-      const tr = table.getElementsByTagName("tr");
-
-      const resetPasswordButton = document.getElementById('resetPasswordButton');
-      resetPasswordButton.addEventListener('click', () => {
-        const userId = document.querySelector('#user-details-popup .delete-btn').dataset.id;
-        resetPassword(userId);
-      });
-
-      searchInput.addEventListener('input', () => {
-        const searchTerm = searchInput.value.toUpperCase();
-
-        for (let i = 1; i < tr.length; i++) {
-          let found = false;
-          const td = tr[i].getElementsByTagName("td");
-          for (let j = 0; j < td.length; j++) {
-            const txtValue = td[j].textContent || td[j].innerText;
-            if (txtValue.toUpperCase().indexOf(searchTerm) > -1) {
-              found = true;
-              break;
-            }
-          }
-          tr[i].style.display = found ? "" : "none";
-        }
-      });
-    }
-
-    searchUsers();
-  });
-</script>
-
-<script>
-  function showPopup(element) {
-    // ดึงข้อมูลจาก data attribute ของ tr ที่คลิก
-    const complaint = {
-      complaintNumber: element.dataset.complaintnumber,
-      username: element.dataset.username,
-      submittedAt: element.dataset.submittedat,
-      category: element.dataset.category,
-      status: element.dataset.status,
-      details: element.dataset.details
-    };
-
-    // แสดงข้อมูลใน popup
-    document.getElementById('popupComplaintNumber').innerText = complaint.complaintNumber;
-    document.getElementById('popupUsername').innerText = complaint.username;
-    document.getElementById('popupSubmittedAt').innerText = complaint.submittedAt;
-    document.getElementById('popupCategory').innerText = complaint.category;
-    document.getElementById('popupStatus').innerText = complaint.status;
-    document.getElementById('popupDetails').innerText = complaint.details;
-
-    // แสดง popup
-    document.querySelector('.popup-overlay-announcement').style.display = 'flex';
-    document.getElementById('announcementPopup').style.display = 'block';
-  }
-
-  // ฟังก์ชันสำหรับปิด Popup (เหมือนเดิม)
-  function closePopup() {
-    document.getElementById('announcementPopup').style.display = 'none';
-    document.querySelector('.popup-overlay-announcement').style.display = 'none';
-  }
-</script>
+<script src="./public/script/UserAccountManagementScipt/UserAccountManagement.js"></script>
